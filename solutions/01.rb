@@ -1,11 +1,13 @@
-def fibonacci_formula(index_of_term, first_term)
-  return first_term if index_of_term == 1
-  return 1 if index_of_term == 2
-  fibonacci_formula(index_of_term - 1, first_term) +
-  fibonacci_formula(index_of_term - 2, first_term)
+def formula(first_term, nth)
+  return first_term if nth == 1
+  return 1 if nth == 2
+
+  formula(nth - 1, first_term) + formula(nth - 2, first_term)
 end
-def series(name, index_of_term)
-  return fibonacci_formula(index_of_term, 1) if name == 'fibonacci'
-  return fibonacci_formula(index_of_term, 2) if name == 'lucas'
-  fibonacci_formula(index_of_term, 1) + fibonacci_formula(index_of_term, 2)
+
+def series(name, nth)
+  choose = {'fibonacci' => 1, 'lucas' => 2}
+  return formula(nth, choose[name])
+  
+  formula(1, nth) + formula(2, nth)
 end
