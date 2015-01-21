@@ -3,22 +3,22 @@ module UI
   class LabelMain
     def initialize(&block)
       @data = []
-      block yield # horizontal(&block)
+      instance_eval(&block)
     end
 
     def horizontal(style: nil, border: nil, &block)
-      horizontal = Horizontal.new(style: style, border: border, &block) # <Object - Horizontal-1.01 - @style, @border, @data,
+      horizontal = Horizontal.new(style: style, border: border, &block)
       @data << horizontal
     end
 
     def vertical(style: nil, border: nil, &block)
-      vertical = Vertical.new(style: style, border: border)
-      vertical.instance_eval(&block)
+      vertical = Vertical.new(style: style, border: border, &block)
+      @data << vertical
     end
 
-    def label(text:, style: nil, border: nil)
-      style = @style unless style == nil
-      @data << Label.new(text: text, style: style, border: border)
+    def label(text:, style: nil)
+      style = @style if style == nil
+      @data << Label.new(text: text, style: style)
     end
 
     def connect_data
@@ -26,36 +26,36 @@ module UI
     end
 
     def to_s
-      @data.connect_data  
+      connect_data
     end
   end
 
   class Horizontal < LabelMain
     def initialize(style: nil, border: nil, &block)
       @style, @border = style, border
-      super(&block) # []
+      super(&block)
     end
   end
 
   class Vertical < LabelMain
-    
+
     def initialize(style: nil, border: nil, &block)
       @style, @border = style, border
-      super(&block) # []
+      super(&block)
     end
 
     def connect_data
-      @data.reduce{ |object1, object2| object1.to_s + '\n' + object2.to_s}
+      @data.reduce{ |object1, object2| object1.to_s + "\n" + object2.to_s }
     end
   end
 
   class Label
-
-    def initialize(text:, style: nil, border: nil)
-      @text, @style, @border = text, style, border
+    def initialize(text:, style: nil)
+      @text, @style = text, style
     end
 
     def to_s
+      return @text if @style == nil
       @text.send(@style)
     end
   end
